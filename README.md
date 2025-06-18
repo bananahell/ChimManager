@@ -20,7 +20,9 @@ You'll really just need to get the addon and the app, run the client, login, and
 
 ### Advanced users
 
-Nothing much more for you to see, honestly. The data is extracted from the game and saved into the SavedVariables folder, inside .../Elder Scrolls Online/live/SavedVariables/ChimManager.lua, and pronto. The client will watch for this file changing and send its content straight to the [app](https://github.com/bananahell/ChimManager-App)!
+Lua-wise, nothing much more for you to see, honestly. The data is extracted from the game and saved into the SavedVariables folder, inside .../Elder Scrolls Online/live/SavedVariables/ChimManager.lua, and pronto. The client will watch for this file changing and send its content straight to the [app](https://github.com/bananahell/ChimManager-App)!
+
+But, if you want to compile the python scripts into a nice clickable window using pyinstaller, you need to make a pip environment (no pipx or apt installations!) because the lupa package is a C extension and so it needs to connect the .so files. Kind of messy, and I really don't wanna explain it here, a 10 year old MMORPG addon... Reach out, I might help o.o
 
 ## Progress
 

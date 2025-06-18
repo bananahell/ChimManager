@@ -8,7 +8,7 @@ The idea of this Addon is to help ESO players organize their ingame "outgame", a
 
 I'm sick of having to login into each character to know what they're up to, what they're holding, etc. And sure, [Inventory Insight](https://www.esoui.com/downloads/info731-InventoryInsight.html) and [Craftstore](https://www.esoui.com/downloads/info1590-CraftStoreMorrowind.html) both do an amazing job on that, most probably even better than myself, since they learned how to program with that lua/xml environment, but they still require you to log into the game to see the data.
 
-The idea of ChimManager is to display the game's info outside of the game. No rules are being broken here, you still need to login to get the data, but like the dudes at [Tamriel Trade Centre](https://tamrieltradecentre.com/), I intend on getting the data from the saved variables made available to then REST API it from a client to, I don't know, a website, or even a mobile app?
+The idea of ChimManager is to display the game's info outside of the game. No rules are being broken here, you still need to login to get the data, but like the dudes at [Tamriel Trade Centre](https://tamrieltradecentre.com/), I intend on getting the data from the saved variables made available to then REST API it from a client to, I don't know, [a website, or even a mobile app](https://github.com/bananahell/ChimManager-App)?
 
 I also think it would be neat to also have this app notify me of finished researches, so that I can log into the game knowing which research is done!
 
@@ -20,7 +20,7 @@ You'll really just need to get the addon and the app, run the client, login, and
 
 ### Advanced users
 
-Nothing much more for you to see, honestly. The data is extracted from the game and saved into the SavedVariables folder, inside .../Elder Scrolls Online/live/SavedVariables/ChimManager.lua, and pronto. The client will watch for this file changing and send its content straight to the app!
+Nothing much more for you to see, honestly. The data is extracted from the game and saved into the SavedVariables folder, inside .../Elder Scrolls Online/live/SavedVariables/ChimManager.lua, and pronto. The client will watch for this file changing and send its content straight to the [app](https://github.com/bananahell/ChimManager-App)!
 
 ## Progress
 
@@ -58,6 +58,10 @@ I'll (try to) keep the updated extracted tree here in the top as I make progress
       [worn]
       [backpack]
 ```
+
+#### Sneaky client and app
+
+Everytime I go to my PC, I only wanna play ESO, so I've been working on my ESOless notebook, and it has been going good. I birthed the python client locally, and I want to start commiting it cleanly here today. The local version already reads the lua file and sends it locally! I also started work on the [app](https://github.com/bananahell/ChimManager-App), and by work I mean it receives the data sent from the client and displays it horribly, but I got really pumped by it!
 
 #### First commit
 

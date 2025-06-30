@@ -19,6 +19,9 @@ class Handler(PatternMatchingEventHandler):
     self._last_event_time = 0
     self._string1 = ""
     self._string2 = ""
+    # Create a separate logger for Qt-specific messages
+    self.qt_logger = logging.getLogger('qt_monitor')
+    self.qt_logger.propagate = False  # Don't propagate to root logger
 
   def on_modified(self, event: FileSystemEvent) -> None:
     now = time.time()
@@ -27,6 +30,10 @@ class Handler(PatternMatchingEventHandler):
     self._last_event_time = now
     time.sleep(0.2)
     logging.info(f"Watchdog received modified event - {event.src_path}")
+    # Log to terminal (via root logger)
+    logging.info(f"Watchdog received modified event - {event.src_path}")
+    # Log to Qt window (via special logger)
+    self.qt_logger.info(f"File modified: {event.src_path}")
     self.read_file(str(event.src_path))
 
   def read_file(self, filepath: str) -> None:

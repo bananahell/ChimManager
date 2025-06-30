@@ -1,6 +1,3 @@
-"""PyQt5 main window for ChimManager with logging display and QR code."""
-
-
 import sys
 import logging
 import socket

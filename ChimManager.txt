@@ -1,6 +1,6 @@
 ## Title: ChimManager
 ## Author: @BananaHell
-## APIVersion: 101045
+## APIVersion: 101046
 ## SavedVariables: ChimManagerSavedVars
 
 ChimManager.lua
@@ -9,3 +9,4 @@ CM_DataCollect_Currency.lua
 CM_DataCollect_CharItems.lua
 CM_DataCollect_PlaceItems.lua
 CM_DataCollect_CharData.lua
+CM_DataCollect_Companion.lua

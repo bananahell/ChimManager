@@ -1,83 +1,61 @@
-import time
-import logging
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 from lupa import LuaRuntime
-from typing import Any
-from watchdog.events import FileSystemEvent
-
-
-logging.basicConfig(level=logging.INFO)
+import time
 
 
 class Handler(PatternMatchingEventHandler):
-  """Watches for changes to ChimManager.lua and processes updates."""
+    def __init__(self):
+        super().__init__(patterns=["ChimManager.lua"],
+                         ignore_directories=True, case_sensitive=False)
+        self._last_event_time = 0
+        self._string1 = ""
+        self._string2 = ""
 
-  def __init__(self):
-    super().__init__(patterns=["ChimManager.lua"],
-                     ignore_directories=True, case_sensitive=False)
-    self._last_event_time = 0
-    self._string1 = ""
-    self._string2 = ""
-    # Create a separate logger for Qt-specific messages
-    self.qt_logger = logging.getLogger('qt_monitor')
-    self.qt_logger.propagate = False  # Don't propagate to root logger
+    def on_modified(self, event):
+        now = time.time()
+        if now - self._last_event_time < 0.5:
+            return
+        self._last_event_time = now
+        time.sleep(0.2)
+        self.read_file(str(event.src_path))
 
-  def on_modified(self, event: FileSystemEvent) -> None:
-    now = time.time()
-    if now - self._last_event_time < 0.5:
-      return
-    self._last_event_time = now
-    time.sleep(0.2)
-    logging.info(f"Watchdog received modified event - {event.src_path}")
-    # Log to terminal (via root logger)
-    logging.info(f"Watchdog received modified event - {event.src_path}")
-    # Log to Qt window (via special logger)
-    self.qt_logger.info(f"File modified: {event.src_path}")
-    self.read_file(str(event.src_path))
+    def read_file(self, filepath):
+        with open(filepath, 'r') as f:
+            lua_code = f.read()
+        lua = LuaRuntime(unpack_returned_tuples=True)
+        lua.execute(lua_code)
+        data = lua.eval('ChimManagerSavedVars')
+        ##########################################################################
+        # TODO functionality placeholder
+        self._string1 = "Top-level keys: " + \
+            ' '.join(str(k) for k in data.keys())
+        # Example: print all character names for @BananaHell
+        chars = data['Default']['@BananaHell']
+        self._string2 = "Characters: " + ' '.join(str(k) for k in chars.keys())
+        print(self._string1)
+        print(self._string2)
+        ##########################################################################
 
-  def read_file(self, filepath: str) -> None:
-    try:
-      with open(filepath, 'r') as f:
-        lua_code = f.read()
-      lua = LuaRuntime(unpack_returned_tuples=True)
-      lua_code = '\n'.join(line for line in lua_code.splitlines()
-                           if not line.strip().startswith('--'))
-      lua.execute(lua_code)
-      data: Any = lua.eval('ChimManagerSavedVars')
-      ##########################################################################
-      # TODO functionality placeholder
-      self._string1 = "Top-level keys: " + ' '.join(str(k) for k in data.keys())
-      logging.info(self._string1)
-      # Example: print all character names for @BananaHell
-      chars = data['Default']['@BananaHell']
-      self._string2 = "Characters: " + ' '.join(str(k) for k in chars.keys())
-      logging.info(self._string2)
-      ##########################################################################
-    except Exception as e:
-      logging.error("Error reading file: %s", e)
-
-  def get_latest_data(self) -> dict[str, str]:
-    return {
-        "string1": self._string1,
-        "string2": self._string2
-    }
+    def get_latest_data(self):
+        return {
+            "string1": self._string1,
+            "string2": self._string2
+        }
 
 
 class FileMonitor:
-  """Monitors the current directory for changes to ChimManager.lua."""
+    def __init__(self):
+        self.path = "."
+        self.handler = Handler()
+        self.observer = Observer()
+        self.observer.schedule(self.handler, path=self.path, recursive=True)
+        self.observer.start()
 
-  def __init__(self):
-    self.path = "."
-    self.handler = Handler()
-    self.observer = Observer()
-    self.observer.schedule(self.handler, path=self.path, recursive=True)
-    self.observer.start()
-
-  def run(self) -> None:
-    try:
-      while True:
-        time.sleep(1)
-    except KeyboardInterrupt:
-      self.observer.stop()
-    self.observer.join()
+    def run(self):
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            self.observer.stop()
+        self.observer.join()

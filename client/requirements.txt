@@ -3,3 +3,5 @@ flask-cors
 watchdog
 lupa
 PyQt5
+qrcode
+Pillow

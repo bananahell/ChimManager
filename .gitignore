@@ -3,4 +3,4 @@ client/__pycache__
 main.spec
 dist
 build
-venv
+.venv

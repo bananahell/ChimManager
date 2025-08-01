@@ -5,12 +5,14 @@ import time
 
 
 class Handler(PatternMatchingEventHandler):
-    def __init__(self):
+
+    def __init__(self, window):
         super().__init__(patterns=["ChimManager.lua"],
                          ignore_directories=True, case_sensitive=False)
         self._last_event_time = 0
         self._string1 = ""
         self._string2 = ""
+        self.window = window
 
     def on_modified(self, event):
         now = time.time()
@@ -26,7 +28,7 @@ class Handler(PatternMatchingEventHandler):
         lua = LuaRuntime(unpack_returned_tuples=True)
         lua.execute(lua_code)
         data = lua.eval('ChimManagerSavedVars')
-        ##########################################################################
+        ########################################################################
         # TODO functionality placeholder
         self._string1 = "Top-level keys: " + \
             ' '.join(str(k) for k in data.keys())
@@ -35,7 +37,9 @@ class Handler(PatternMatchingEventHandler):
         self._string2 = "Characters: " + ' '.join(str(k) for k in chars.keys())
         print(self._string1)
         print(self._string2)
-        ##########################################################################
+        ########################################################################
+        if self.window:
+            self.window.add_entry_signal.emit(self._string1, self._string2)
 
     def get_latest_data(self):
         return {
@@ -45,9 +49,10 @@ class Handler(PatternMatchingEventHandler):
 
 
 class FileMonitor:
-    def __init__(self):
+
+    def __init__(self, window):
         self.path = "."
-        self.handler = Handler()
+        self.handler = Handler(window)
         self.observer = Observer()
         self.observer.schedule(self.handler, path=self.path, recursive=True)
         self.observer.start()

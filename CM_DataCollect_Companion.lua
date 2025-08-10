@@ -29,11 +29,3 @@ function ChimManager.getCompanionsData()
     end
   end
 end
-
-function ChimManager.getCompanionRapport(companionId)
-  ChimManager.localVars.companions.time = GetTimeStamp()
-  ChimManager.localVars.companions[GetCompanionName(companionId)] = {}
-  ChimManager.localVars.companions[GetCompanionName(companionId)] = {
-    rapport = GetActiveCompanionRapport()
-  }
-end

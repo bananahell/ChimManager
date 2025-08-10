@@ -32,8 +32,12 @@ local function collectAllData()
   ChimManager.getCompanionsData()
 end
 
-local function OnCompanionActivated(event, companionId)
-  ChimManager:getCompanionRapport(companionId)
+local function OnCompanionRapportUpdate(event, companionId, previousRapport, currentRapport, adjustmentAmountType)
+  ChimManager.localVars.companions.time = GetTimeStamp()
+  ChimManager.localVars.companions[GetCompanionName(companionId)] = {}
+  ChimManager.localVars.companions[GetCompanionName(companionId)] = {
+    rapport = currentRapport
+  }
 end
 
 function ChimManager.OnAddonLoaded(event, addonName)
@@ -51,8 +55,8 @@ function ChimManager.OnAddonLoaded(event, addonName)
   ChimManager.localVars.companions = {}
   ChimManager.accountVars.companions = {}
   EVENT_MANAGER:RegisterForEvent(ChimManager.playerDeactivated, EVENT_PLAYER_DEACTIVATED, collectAllData)
-  EVENT_MANAGER:RegisterForEvent(ChimManager.companionActivated, EVENT_COMPANION_ACTIVATED,
-    OnCompanionActivated)
+  EVENT_MANAGER:RegisterForEvent(ChimManager.companionActivated, EVENT_COMPANION_RAPPORT_UPDATE,
+    OnCompanionRapportUpdate)
 end
 
 EVENT_MANAGER:RegisterForEvent("ChimManager", EVENT_ADD_ON_LOADED, ChimManager.OnAddonLoaded)

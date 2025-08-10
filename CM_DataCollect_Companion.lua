@@ -1,12 +1,4 @@
-function ChimManager:getCompanionData(companionId)
-  if not HasActiveCompanion() then
-    return
-  end
-
-  d(tostring(GetCompanionName(companionId)))
-
-  ChimManager.localVars.companions.time = GetTimeStamp()
-  ChimManager.localVars.companions[GetCompanionName(companionId)] = {}
+local function getCompanionData(companionId)
   ChimManager.accountVars.companions.time = GetTimeStamp()
   ChimManager.accountVars.companions[GetCompanionName(companionId)] = {}
 
@@ -27,6 +19,20 @@ function ChimManager:getCompanionData(companionId)
     gear = gear,
     skills = skills
   }
+end
+
+
+function ChimManager.getCompanionsData()
+  for companionId = 0, 15 do
+    if GetCompanionName(companionId) ~= "" then
+      getCompanionData(companionId)
+    end
+  end
+end
+
+function ChimManager.getCompanionRapport(companionId)
+  ChimManager.localVars.companions.time = GetTimeStamp()
+  ChimManager.localVars.companions[GetCompanionName(companionId)] = {}
   ChimManager.localVars.companions[GetCompanionName(companionId)] = {
     rapport = GetActiveCompanionRapport()
   }

@@ -29,10 +29,11 @@ end
 local function collectAllData()
   getInventories()
   GetCharacterInfo()
+  ChimManager.getCompanionsData()
 end
 
 local function OnCompanionActivated(event, companionId)
-  ChimManager:getCompanionData(companionId)
+  ChimManager:getCompanionRapport(companionId)
 end
 
 function ChimManager.OnAddonLoaded(event, addonName)
